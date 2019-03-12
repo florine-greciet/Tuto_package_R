@@ -5,7 +5,7 @@
 - Pour soit même : Pour conserver le bénéfice des fonctions que l'on crée pour soit.
 - Pour les autres : Pour partager un package et la documentation associée est beaucoup plus simple que de partager des scripts.
 
-Liens utiles pour réer un package : 
+Liens utiles pour créer un package : 
 - http://kbroman.org/pkg_primer/
 -   https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 
@@ -17,7 +17,7 @@ Liens utiles pour réer un package :
 
 ### Dépôt et squelette :
 
-- créer un dossier **monpackage** dans l'emplacement voulu (github,document)
+- créer un dossier **monpackage** dans l'emplacement voulu (mes documents par exemple)
 
 Pour créer l'architecture d'un package, nous aurons besoin des deux packages suivants : 
 - le package **devtools** : pour la création et l'installation du package.
@@ -45,8 +45,10 @@ Sinon il est également possible de créer son package **R** directement à part
 Lorsque l'on crée son package, les fichiers suivants sont créés dans le dossier choisi : 
 - un fichier **DESCRIPTION**
 - un fichier **NAMESPACE**
-- un dossier**R** (qui contiendra les scripts contenant eux même les fonctions)
+- un dossier **R** (qui contiendra les scripts contenant eux même les fonctions)
 - Les fichiers **.gitignore**, **.Rbuildignire**, et un projet **Rstudio**
+
+Le **.gitignore** permet d’indiquer les fichiers/dossiers que l’on ne souhaite pas versionner sur git, le **.Rbuildignore** permet de lister les fichiers/dossiers qui ne doivent pas être pris en compte par le package, c’est le cas du fichier en .Rproj, par exemple, qui indique qu’il s’agit d’un projet Rstudio
 
 ## Modification du fichier **DESCRIPTION**
 Il faut modifier : 
@@ -122,7 +124,7 @@ somme <- function(X,Y)
 #### Import de librairie utilisée dans une fonction
 
 Si la fonction contient des packages qu'il faut importer 
-il faut ajouter des `import`ou des `importFrom` :
+il faut ajouter des `import` (pour importer toute la librairie) ou des `importFrom` (pour importer une fonction de la librairie) :
 
 ```R
 #' moyenne
@@ -139,8 +141,16 @@ moyenne <- function(x)
   sum(x)/length(x) 
 }
 ```
+Attention, si on utilise une fonction uniquement dans la partie exemple, 
+```R
+#' @examples
+#' library(base)
+#' echantillon = sample(seq(1,100,by=1),15)
+#' moyenne(echantillon)
+```
+alors il n'est pas nécessaire d'importer la fonction par un `@import` il faut directement écrire dans l'exemple `library(nomLibrary)`. 
 
-Pour que les imports de librairie soit pris en compte il faut également les ajouter dans le fichier **DESCRIPTION** du pakage. Pour faire cela il faut créer un fichier `devtools_history.R`qui sera enregistrer dans le package `monpackage`.
+Pour que les imports de librairie soit pris en compte il faut également les ajouter dans le fichier **DESCRIPTION** du pakage. Afin de ne pas modifier directement ce fichier et de s'assurer de la reproductibilité du travail effectué, il est recommandé de créer un fichier intitulé `devtools_history.R`. Celui-ci contiendra tous les appels à **devtools** qui doivent être effectués. Ce fichier n'est donc là que pour les archives du package. Il peut être positionné à la racine du package. 
 
 Ce fichier contient : 
 ```R
@@ -150,6 +160,10 @@ usethis::use_build_ignore("devtools_history.R")
 usethis::use_package("stats") #Les packages à ajouter
 usethis::use_package("magrittr")
 ```
+
+L'instruction `usethis::use_build_ignore("devtools_history.R")` indique à `Rstudio`qu'il doit ignorer ce fichier. Cela évite de recevoir un warning lié à la présence de fichier dans le pacakge.
+
+Il est nécessaire de compiler ce fichier manuellement pour que les lignes de codes s'executent car elles ne seront pas automatiquement lancées.
 
 Si l'on regarde le fichier **DESCRIPTION** après avoir compiler le code ci-dessus : 
 

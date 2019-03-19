@@ -161,7 +161,7 @@ usethis::use_package("stats") #Les packages à ajouter
 usethis::use_package("magrittr")
 ```
 
-L'instruction `usethis::use_build_ignore("devtools_history.R")` indique à `Rstudio`qu'il doit ignorer ce fichier. Cela évite de recevoir un warning lié à la présence de fichier dans le pacakge.
+L'instruction `usethis::use_build_ignore("devtools_history.R")` indique à `Rstudio` qu'il doit ignorer ce fichier. Cela évite de recevoir un warning lié à la présence de fichier dans le package.
 
 Il est nécessaire de compiler ce fichier manuellement pour que les lignes de codes s'executent car elles ne seront pas automatiquement lancées.
 
@@ -188,10 +188,53 @@ La commande suivante permet de générer les fichiers d'aides à partir des ent�
 ```R 
 devtools::document("monpackage")
 ```
-On peut réexecuter cette fonction (puis reinstaller le package) pour mettre à jour la documentation si l'on modifie les entêtes par la suite.
+Cette commande est directement exécutée si l'on fait un `check` du package.
+Il suffit ensuite de cliquer sur `install and restart` pour réinstaller le pacage pour mettre à jour la documentation. 
+
+Pour que l'aide soir clairement écrite il est important de bien compléter son entête. 
+
+Par exemple 
+```R
+#' @title Inference methods for two regimes
+
+#' @description  H2SPOR is an inference method that estimate, under regularity constraint, the parameters of a piecewise
+#' polynomial regression model with 2 regimes.
+#'
+#' @param X a numerical vector corresponding to the explicative variable.
+#' @param Y a numerical vector corresponding to the variable to explain. Y contains two regimes that
+#' could be model by polynomials.
+#' @param deg Degree of the polynomials
+#' @param constraint Number which determines the applied assumption. By default assumption is 1. If this
+#' term is 1, The estimation is obtained under assumption of continuity. If it is 0 or 2, it is designed for
+#' no assumption or assumption of differentiability.
+#' @param EM A logical value. If TRUE (default) the estimations will be obtained accross an EM algorithm.
+#' If FALSE the estimations will be obtained accross a fixed point algorithm.
+#' @param TimeTrans_Prop A numerical vector. This vector is empty by default. If you want to test one specific
+#' time of transition you can put it on TimeTrans_Prop.
+#' @param plotG A logical value. If TRUE (default) the H2SPOR is plottedy.
+#'
+#' @return A data.frame which contains the estimated parameters (Times of transitions, polynomials coefficients and variances)
+#'  of the piecewise polynomial regression model with two regimes.
+#'  If plotG = TRUE, the data and the estimated model will be plotted.
+#'
+#' @import graphics
+#' @export
+#'
+#' @examples
+#' xgrid1 = seq(0,10,by=0.2)
+#' xgrid2 = seq(10.2,20,by=0.2)
+#' ygrid1 = xgrid1^2-xgrid1+1+ rnorm(length(xgrid1),0,3)
+#' ygrid2 = rep(91,length(xgrid2))+ rnorm(length(xgrid2),0,3)
+#' xgrid = c(xgrid1,xgrid2)
+#' ygrid = c(ygrid1,ygrid2)
+#'
+#' H2SPOR(xgrid,ygrid,2,1,TRUE,c())
+```
+
+Après avoir réinstallé le package, si je tape `?H2SPOR`(H2SPOR est le nom de ma fonction), alors l'aide de la fonction s'ouvre sur Rstudio et contient toutes les informations indiquées dans l'entête de la fonction.
 
 #### Création d'une vignette
-Une `vignette`correspond à la documentation informelle d'un package.
+Une `vignette` correspond à la documentation informelle d'un package.
 
 Pour générer une vignette : 
 ```R 

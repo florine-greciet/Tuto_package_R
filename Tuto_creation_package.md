@@ -13,6 +13,8 @@ Liens utiles pour créer un package :
 
 - https://thinkr.fr/creer-package-r-quelques-minutes/
 
+- https://www.math.u-psud.fr/~goude/Materials/ProjetMLF/editer_package_R.html 
+
 ## Création d'un dépôt local pour le package
 
 ### Dépôt et squelette :
@@ -55,14 +57,17 @@ Il faut modifier :
 - `Le titre` : mettre un titre qui décrit l'usage du package  
 - `l'auteur` : 
 ```R
-Authors@R: person("Florine", "Greciet", email = "florine.greciet@gmail.com", role = c("aut", "cre"))
+Authors@R: c(person("Florine", "Greciet", email = "florine.greciet@gmail.com", role = c("aut", "cre")),person("Romain", "Azaïs", email = "romain.azais@", role = c("aut")))
 ```
+`aut` est utilisé pour les auteurs du package. `cre`est utilisé pour la personne qui maintiendra le package. 
+
 - `Description`: description de ce que fait le package. Ne pas oublier de conserver le `.`à la fin du paragraphe.
+Dans la partie description, nous pouvons citer un travail qui a été réalisé et qui fait appel au package R. 
+Par exemple : Travail basé sur l'article : Florine Greciet Nom de l'article. Annee. <https://nomarticle>.
 
 - `Depends`: A partir de quelle version on peut utiliser notre package. 
 
 - `Licence`: Licence utilisée (GPL , MIT)
-
 par exemple : 
 ```R 
 Package: HSPOR
@@ -75,6 +80,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 ```
+
 
 ## Organisation des scripts
 
@@ -231,7 +237,7 @@ Par exemple
 #' H2SPOR(xgrid,ygrid,2,1,TRUE,c())
 ```
 
-Après avoir réinstallé le package, si je tape `?H2SPOR`(H2SPOR est le nom de ma fonction), alors l'aide de la fonction s'ouvre sur Rstudio et contient toutes les informations indiquées dans l'entête de la fonction.
+Après avoir réinstallé le package, si je tape `?H2SPOR` (H2SPOR est le nom de ma fonction), alors l'aide de la fonction s'ouvre sur Rstudio et contient toutes les informations indiquées dans l'entête de la fonction.
 
 #### Création d'une vignette
 Une `vignette` correspond à la documentation informelle d'un package.
@@ -276,12 +282,16 @@ Pour les limiter et s'assurer d'une construction efficace du package, il est pr�
 
 Installation depuis le dépôt local vers une librairie : 
 ```R
-devtools::install("monpackage")
+usethis::install("monpackage")
 ```
-
 sinon on peut aussi faire : **CTRL + SHIFT + B**
 où encore : dans la console : cliquer sur `Install and Restart`
 Une fois le package installé on peut utiliser ses fonctions.
+
+Pour que d'autres personnes puissent utiliser notre package avant qu'il soit déposer sur le CRAN il suffit de faire 
+`build`-> `More`-> `build source package`. 
+Un fichier tar.gz (HSPOR_1.0.0.tar.gz dans mon cas) sera créé dans le fichier qui contient le package.
+Il suffit ensuite d'aller dans R studio puis installer le package en choisisant de l'installer à partir d'un fichier tar.gz. 
 
 ## Installation du package sous **CRAN**
 
